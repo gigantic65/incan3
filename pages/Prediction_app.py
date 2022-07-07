@@ -458,7 +458,7 @@ def app():
         if st.button('Run Prediction',key = count):
             
             
-            st.markdown("<h6 style='text-align: left; color: darkblue;'> 1. 조색제 배합 샘플 (BaseA: 23,000  B: 23,000  BaseC: 25,000) </h6>", unsafe_allow_html=True)
+            #st.markdown("<h6 style='text-align: left; color: darkblue;'> 1. 조색제 배합 샘플 (BaseA: 23,000  B: 23,000  BaseC: 25,000) </h6>", unsafe_allow_html=True)
             
             if selected2 =='Base_A':
                 
@@ -764,7 +764,7 @@ def app():
 
             
             
-            st.markdown("<h6 style='text-align: left; color: darkblue;'> 3. 조색 배합 예측 결과 </h6>", unsafe_allow_html=True)
+            st.markdown("<h6 style='text-align: left; color: darkblue;'> 3. 신규 조색 배합 예측 결과 </h6>", unsafe_allow_html=True)
             
             #st.write(para4)
                    
