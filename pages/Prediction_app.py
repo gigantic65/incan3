@@ -452,7 +452,7 @@ def app():
         color_list = pd.DataFrame(color_list,columns=['color'])
         
 
-
+        DT = pd.read_csv('incan_data_r0.csv')
         count = 0
         
         if st.button('Run Prediction',key = count):
@@ -653,21 +653,59 @@ def app():
                     scaler = scaler4
                                         
                     
-                #st.write(df)
-                #st.write(model)
-                
                 para3['UT6581'] = 0.0
                 para3['UT578_A'] = 0.0
                 para3['UT578_AF'] = 0.0
                 para3['UT578_AS'] = 0.0
                 if selected1 == 'UT6581':
                     para3['UT6581'] = 1.0
+                    DT = DT[DT['UT6581']==1]
+                    DT = DT[DT['Base_C']==1]
                 if selected1 == 'UT578_A':
                     para3['UT578_A'] = 1.0
+                    DT = DT[DT['UT578_A']==1]
+                    DT = DT[DT['Base_C']==1]
                 if selected1 == 'UT578_AF':
                     para3['UT578_AF'] = 1.0
+                    DT = DT[DT['UT578_AF']==1]
+                    DT = DT[DT['Base_C']==1]
                 if selected1 == 'UT578_AS':
                     para3['UT578_AS'] = 1.0
+                    DT = DT[DT['UT578_AS']==1]
+                    DT = DT[DT['Base_C']==1]
+                    
+                    
+                Target_v = pd.DataFrame(Target_v)
+                Target_v = Target_v.T
+                Target_v.columns = Target_n
+                
+                DT = DT.reset_index(drop=True)
+                
+                
+                DT['Delta_E'] = 0.0
+                
+                
+                for i in range(DT.shape[0]):
+                    DT['Delta_E'][i] = ((Target_v['Target_L'].values - DT['Target_L'][i])**2+(Target_v['Target_a'].values - DT['Target_a'][i])**2+(Target_v['Target_b'].values - DT['Target_b'][i])**2)**0.5 
+                        
+                DT.sort_values(by='Delta_E', ascending=True, inplace =True)
+                
+                
+                DT = DT[DT['Delta_E']<1.5]
+                
+                
+                st.write('')
+                st.markdown("<h6 style='text-align: left; color: darkblue;'> 1. 기존 유사 조색제 배합 </h6>", unsafe_allow_html=True)
+    
+                st.write(DT)
+                
+                st.write('')
+                st.write('')
+                st.write('')
+                
+                
+                st.markdown("<h6 style='text-align: left; color: darkblue;'> 2. 배합 샘플 생성 (BaseA: 23,000  B: 23,000  BaseC: 25,000) </h6>", unsafe_allow_html=True)
+                
                 
                 st.write(para3)
                 
@@ -691,9 +729,7 @@ def app():
                 y = y.reset_index(drop=True)
                 
                 
-                Target_v = pd.DataFrame(Target_v)
-                Target_v = Target_v.T
-                Target_v.columns = Target_n
+
 
 
                 para4['Delta_E'] = 0.0
@@ -728,7 +764,7 @@ def app():
 
             
             
-            st.markdown("<h6 style='text-align: left; color: darkblue;'> 2. 조색 배합 예측 결과 </h6>", unsafe_allow_html=True)
+            st.markdown("<h6 style='text-align: left; color: darkblue;'> 3. 조색 배합 예측 결과 </h6>", unsafe_allow_html=True)
             
             #st.write(para4)
                    
@@ -1334,3 +1370,4 @@ def app():
             st.markdown('**최종 결과 파일 저장**')
             st_pandas_to_csv_download_link(para7, file_name = "Predicted_Results.csv")
             st.write('*Save directory setting : right mouse button -> save link as')
+
